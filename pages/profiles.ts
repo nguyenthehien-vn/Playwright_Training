@@ -9,10 +9,10 @@ export default class PanelPage {
   readonly relatedDataSelect: Locator = this.page.locator('#cbbSubReport');
   readonly nextBtn: Locator = this.page.getByRole("button", { name: 'Next' });
   readonly addNewTable: Locator = this.page.locator('#wstep');
-  readonly sortFieldsLink: Locator = this.addNewTable.getByText("Sort Fields");
-  readonly fieldSelect: Locator = this.page.locator("#cbbFields");
+    readonly fieldSelect: Locator = this.page.locator("#cbbFields");
   readonly addLevelBtn: Locator = this.page.locator("#btnAddSortField");
   readonly fieldName: Locator = this.page.locator("#profilesettings").locator(".sortFieldName");
+  readonly sortFieldsLink: Locator = this.page.getByRole('listitem').filter({hasText: 'Sort Field'});
   constructor(private readonly page: Page) { }
 
   async openAddNewPanel(): Promise<void> {
@@ -26,17 +26,14 @@ export default class PanelPage {
 
   }
   async addSortFields(field: string): Promise<void> {
-    if (await this.page.locator("#profilesettings").getByText("Sort Fields").isVisible()) {
+    
       await this.fieldSelect.selectOption(field);
       await this.addLevelBtn.click();
-    }else{
-      await this.sortFieldsLink.click();
-      await this.fieldSelect.selectOption(field);
-      await this.addLevelBtn.click();
-    }
+  
+    
     
   }
   async verifysortFields(fieldName: string): Promise<void> {
-    await expect(this.page.locator("//span[@class = 'sortFieldName' and text()='" + fieldName + "']").isVisible());
+    await (this.page.locator("//span[@class = 'sortFieldName' and text()='" + fieldName + "']").isVisible());
   }
 }
